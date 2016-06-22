@@ -1,5 +1,4 @@
 import requests
-import smtplib
 from twilio.rest import TwilioRestClient
 
 def main():
@@ -29,7 +28,7 @@ def main():
  
     if (enrolled<maxEnrolled):
         sms = client.messages.create(to = "+14158302607",
-                               from_="+16692312227",
+                               from_="+15622000373",
                             body = "Alert: Course enrolled < maxium enrollment:\n"+
                                      str(enrolled) + " : " + str(maxEnrolled)) 
     print(sms.sid)
