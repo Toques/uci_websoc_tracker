@@ -18,8 +18,8 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name = 'index'),
-    url(r'^register/', include('authentication.urls')),
+    url(r'^', include('home.urls')),
+    url(r'^auth/', include('authentication.urls')),
     url(r'^courses/', include('courses.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -13,7 +13,7 @@
     {% else %}
     Register here!<br />
 
-    <form id = "user_form" method = "post" action = "/register/"
+    <form id = "user_form" method = "post" action = "{% url 'authentication:register' %}"
                 enctype = "multipart/form-data">
 
           {% csrf_token %}

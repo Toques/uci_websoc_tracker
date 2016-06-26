@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from .forms import UserForm, UserProfileForm
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
 # Create your views here.
 def register(request):
     registered = False
@@ -31,3 +34,24 @@ def register(request):
                               {'user_form': user_form,
                                'profile_form':profile_form,
                                'registered': registered},context)
+
+def user_login(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username = username, password = password)
+
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('courses:index'))
+            else:
+                return HttpResponse("Your account is disabled.")
+        else:
+            print("Invalid login details: {0}, {1}".format(username,password))
+            return HttpResponse("Invalid login details supplied.")
+
+    else:
+        return render(request,'authentication/login.html')
