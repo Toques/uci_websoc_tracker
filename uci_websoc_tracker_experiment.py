@@ -15,12 +15,11 @@ def main():
     maxEnrolled = int(info[length-5-1])
     enrolled = int(info[length-4-1])
     waitlist = info[length-3-1]
-
+    print(info)
     print(courseCode)
     print(maxEnrolled)
     print(enrolled)
     print(waitlist)
-
     ACCOUNT_SID = "AC8563bbddc734434f3f0598d90f7c23c6" 
     AUTH_TOKEN = "ead2b8568678dda16eb0380f80cdf7fa" 
  

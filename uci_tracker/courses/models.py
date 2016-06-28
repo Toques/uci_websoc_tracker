@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Course(models.Model):
@@ -9,7 +9,7 @@ class Course(models.Model):
     wait_list = models.PositiveSmallIntegerField()
     restrictions = models.CharField(max_length = 5)
     status = models.CharField(max_length = 7)
-    websoc_url = models.URLField()
+    user = models.ManyToManyField('authentication.UserProfile')
 
     def __str__(self):
         return self.course_code
@@ -17,8 +17,5 @@ class Course(models.Model):
     def course_is_open(self):
         return (self.status == "OPEN" and self.current_enrollment < self.max_enrollment)
 
-class CourseRequest(models.Model):
-    course_code = models.ForeignKey(Course, on_delete = models.CASCADE)
-    user = models.ForeignKey('authentication.UserProfile', on_delete = models.CASCADE)
-    def __str__(self):
-        return self.course_code + " requested by user: " + self.user
+    def get_absolute_url(self):
+        return reverse('course-detail', kwargs={'pk': self.pk})

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+</head>
+
+Tracked Courses:<br />
+<a href="{% url 'courses:add' %}" >Add a course</a><br />
+Course Code  Max Enrollment   Current Enrollment  Wait List  Restrictions  Status
+{% if courses %}
+    <ul>
+        {% for course in courses %}
+        <li>{{course.course_code}}  {{course.max_enrollment}}   {{course.current_enrollment}}
+         {{course.wait_list}}    {{course.restrictions}}    {{course.status}}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No courses tracked</p>
+{% endif %}
+</body>
+</html>
