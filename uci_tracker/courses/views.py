@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from .utils import request_websoc
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from twilio.rest import TwilioRestClient
 
 # Create your views here.
@@ -16,6 +17,7 @@ from twilio.rest import TwilioRestClient
 #     print(request.GET)
 #     return render(request, 'courses/index.html')
 
+
 class index(generic.ListView):
     template_name = 'courses/index.html'
     context_object_name = 'courses'
@@ -23,6 +25,7 @@ class index(generic.ListView):
     def get_queryset(self):
         return Course.objects.filter(user__user = self.request.user)
 
+@login_required()
 def add(request):
         context = RequestContext(request)
         if request.method == 'POST':

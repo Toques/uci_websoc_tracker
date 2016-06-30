@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .forms import UserForm, UserProfileForm
 from django.template import RequestContext
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 # Create your views here.
@@ -46,7 +46,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect(reverse('courses:index'))
+                return HttpResponseRedirect(request.POST.get('next',reverse('courses:index')))
             else:
                 return HttpResponse("Your account is disabled.")
         else:
@@ -55,3 +55,7 @@ def user_login(request):
 
     else:
         return render(request,'authentication/login.html')
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home:index'))

@@ -6,7 +6,8 @@
 </head>
 
 Tracked Courses:<br />
-<a href="{% url 'courses:add' %}" >Add a course</a><br />
+<a href="{% url 'courses:add' %}" >Add a course</a>
+<a href="{% url 'authentication:logout' %}">Logout</a><br />
 Course Code  Max Enrollment   Current Enrollment  Wait List  Restrictions  Status
 {% if courses %}
     <ul>
