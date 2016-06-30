@@ -10,3 +10,8 @@ class AddCourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ('course_code',)
+
+class DeleteCourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ('course_code',)

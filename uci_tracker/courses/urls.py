@@ -6,5 +6,5 @@ app_name = 'courses'
 urlpatterns = [
     url(r'^$', login_required(views.index.as_view()), name = 'index'),
     url(r'^add$', views.add, name = 'add'),
-
+    url(r'^delete', views.delete, name = 'delete'),
 ]

@@ -46,7 +46,10 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                return HttpResponseRedirect(request.POST.get('next',reverse('courses:index')))
+                if request.POST.get('next') != '':
+                    return HttpResponseRedirect(request.POST.get('next'))
+                else:
+                    return HttpResponseRedirect(reverse('courses:index'))
             else:
                 return HttpResponse("Your account is disabled.")
         else:

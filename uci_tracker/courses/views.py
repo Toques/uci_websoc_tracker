@@ -1,4 +1,4 @@
-from .forms import AddCourseForm
+from .forms import AddCourseForm, DeleteCourseForm
 from django.template import RequestContext
 from .models import Course
 from django.views import generic
@@ -70,7 +70,30 @@ def add(request):
         else:
             course_form = AddCourseForm()
 
-        return render(request, 'courses/course_form.html',
+        return render(request, 'courses/add_course_form.html',
                       {'course_form': course_form}, context)
 
+@login_required()
+def delete(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        course_form = DeleteCourseForm(data=request.POST)
+        if course_form.is_valid():
+            data = course_form.cleaned_data
+            course_code = data['course_code']
 
+            course = Course.objects.get(course_code = course_code)
+            userProfileType = ContentType.objects.get(app_label='authentication', model='userprofile')
+            userProfile = userProfileType.get_object_for_this_type(user=request.user)
+
+            course.user.remove(userProfile)
+
+            if(course.user.count() == 0):
+                course.delete()
+            return HttpResponseRedirect(reverse('courses:index'))
+
+    else:
+        course_form = DeleteCourseForm()
+
+    return render(request, 'courses/delete_course_form.html',
+                  {'course_form': course_form}, context)
