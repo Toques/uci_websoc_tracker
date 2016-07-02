@@ -4,11 +4,10 @@ from .models import Course
 from django.views import generic
 from django.shortcuts import render
 from django.contrib.contenttypes.models import ContentType
-from .utils import request_websoc
+from .utils import request_websoc, save_course_data, notify
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from twilio.rest import TwilioRestClient
 
 # Create your views here.
 
@@ -32,37 +31,27 @@ def add(request):
             course_form = AddCourseForm(data=request.POST)
 
             if course_form.is_valid():
+                data = course_form.cleaned_data
+                course_code = data['course_code']
                 try:
                     newCourse = False
-                    course = Course.objects.get()
+                    course = Course.objects.get(course_code = course_code)
                 except(Course.DoesNotExist):
                     course = course_form.save(commit = False)
                     newCourse = True
-                data = course_form.cleaned_data
-                course_code = data['course_code']
+
                 kwargs = {'YearTerm': '2016-14'}
 
                 info = request_websoc(course_code, **kwargs)
+                save_course_data(course, info)
 
-                length = len(info)
-                max_enroll = int(info[length - 5 - 1])
-                enrolled = int(info[length - 4 - 1])
-                waitlist = info[length - 3 - 1]
-                restr = info[length - 1 - 1]
-                status = info[length -1]
-
-                course.max_enrollment = max_enroll
-                course.current_enrollment = enrolled
-                course.wait_list = waitlist
-                course.restrictions = restr
-                course.status = status
-
-                course.save()
                 userProfileType = ContentType.objects.get(app_label = 'authentication', model = 'userprofile')
                 userProfile = userProfileType.get_object_for_this_type(user = request.user)
                 course.user.add(userProfile)
                 if(newCourse):
                     course_form.save_m2m()
+                if (course.course_is_open()):
+                    notify(userProfile, msg="Alert: Course: " + course.course_code + " is open!")
                 return HttpResponseRedirect(reverse('courses:index'))
             else:
                 print(course_form.errors)
@@ -97,3 +86,16 @@ def delete(request):
 
     return render(request, 'courses/delete_course_form.html',
                   {'course_form': course_form}, context)
+
+def refresh(request):
+    for course in Course.objects.all():
+        kwargs = {'YearTerm': '2016-14'}
+
+        info = request_websoc(course.course_code, **kwargs)
+        save_course_data(course, info)
+        if (course.course_is_open()):
+            userProfileType = ContentType.objects.get(app_label='authentication', model='userprofile')
+            for user in course.user.all():
+                userProfile = userProfileType.get_object_for_this_type(user=user.user)
+                notify(userProfile, msg = "Alert: Course: " + course.course_code + " is open!")
+    return HttpResponseRedirect(reverse('courses:index'))
