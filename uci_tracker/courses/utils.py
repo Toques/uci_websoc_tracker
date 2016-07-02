@@ -41,7 +41,7 @@ def save_course_data(course, info):
     course.max_enrollment = int(info.get('Max','0'))
     course.current_enrollment = int(info.get('Enr','0'))
     course.wait_list = int(info.get('Wl','0'))
-    course.restrictions = info.get('Restr','')
+    course.restrictions = info.get('Rstr','')
     course.status = info.get('Status','')
 
     course.save()
