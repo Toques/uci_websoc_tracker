@@ -89,10 +89,7 @@ def delete(request):
 
 def refresh(request):
     for course in Course.objects.all():
-        kwargs = {'YearTerm': '2016-14'}
-
-        info = request_websoc(course.course_code, **kwargs)
-        save_course_data(course, info)
+        course.refresh_data(course)
         if (course.course_is_open()):
             userProfileType = ContentType.objects.get(app_label='authentication', model='userprofile')
             for user in course.user.all():

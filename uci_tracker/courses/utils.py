@@ -1,6 +1,5 @@
 import requests
 import re
-from .models import Course
 from twilio.rest import TwilioRestClient
 from twilio import TwilioRestException
 def request_websoc(course_code, **kwargs):

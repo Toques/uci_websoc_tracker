@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from .utils import request_websoc, save_course_data
 
 # Create your models here.
 class Course(models.Model):
