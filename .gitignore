@@ -46,10 +46,3 @@ Temporary Items
 .idea/workspace.xml
 .idea/uci_tracker.iml
 .idea/modules.xml
-
-
-*.pyc
-db.sqlite3
-myvenv
-__pycache__
-local_settings.py
