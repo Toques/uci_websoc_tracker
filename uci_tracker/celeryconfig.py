@@ -1,4 +1,4 @@
-BROKER_URL = 'amqp://'
+BROKER_URL = 'amqp://dyykxxau:RNU9IDsx0vN3hR8DJ5m6soUWxSA1FBu5@wildboar.rmq.cloudamqp.com/dyykxxau'
 CELERY_TIMEZONE = 'America/Los_Angeles'
 
 from datetime import timedelta
