@@ -1,2 +1,2 @@
 web: gunicorn uci_tracker.wsgi --log-file -
-worker: celery -A myapp worker -l info -B -b amqp://dyykxxau:RNU9IDsx0vN3hR8DJ5m6soUWxSA1FBu5@wildboar.rmq.cloudamqp.com/dyykxxau
+worker: celery -A myapp worker --app=uci_tracker.tasks.app -l info -beat -b amqp://dyykxxau:RNU9IDsx0vN3hR8DJ5m6soUWxSA1FBu5@wildboar.rmq.cloudamqp.com/dyykxxau
